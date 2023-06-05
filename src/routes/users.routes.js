@@ -4,9 +4,6 @@ const UserController = require('../controllers/UsersController')
 const userRoutes = Router();
 
 
-function myMiddleware(req, res, next) {
-
-}
 
 
 const userController = new UserController();
