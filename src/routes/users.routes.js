@@ -1,12 +1,11 @@
 const { Router } = require('express');
 
 const UserController = require('../controllers/UsersController')
-const userRoutes = Router();
-
-
-
+const usersRoutes = Router();
 
 const userController = new UserController();
-userRoutes.get('/', myMiddleware, userController.create);
 
-module.exports = userRoutes;
+usersRoutes.post('/', userController.create);
+usersRoutes.put('/:id', userController.update);
+
+module.exports = usersRoutes;
