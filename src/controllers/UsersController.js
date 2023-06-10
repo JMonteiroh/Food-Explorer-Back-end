@@ -1,6 +1,6 @@
 const AppError = require('../utils/AppError');
 
-const { hash , compare } = require('bcrypt');
+const { hash } = require('bcrypt');
 
 const sqliteConnection = require('../database/sqlite');
 
@@ -41,8 +41,8 @@ class UserController {
       throw new AppError('Este e-mail já esta em uso.');
     }
 
-    user.name = name;
-    user.email = email;
+    user.name = name ?? user.name;
+    user.email = email ?? user.email;
 
     await database.run(`
       UPDATE users SET
