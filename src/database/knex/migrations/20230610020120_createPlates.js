@@ -4,10 +4,10 @@ exports.up = knex => knex.schema.createTable('plates', table => {
   table.text('description');
   table.varchar('image');
   table.text('price');
-  table.integer('user_id').references('id').inTable('users');
+  table.integer('user_id').references('id').inTable('users').onDelete('CASCADE');
   table.timestamp('created_at').default(knex.fn.now());
   table.timestamp('updated_at').default(knex.fn.now());
   
 });
 
-exports.down = knex => knex.schema.dropTable('Plates');
+exports.down = knex => knex.schema.dropTable('plates');
