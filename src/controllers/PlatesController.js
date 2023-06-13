@@ -59,7 +59,16 @@ class PlatesController {
       const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim());
       
       plates = await knex('ingredients')
-        .whereIn('name', filterIngredients)
+        .select([
+          "plates.id",
+          "plates.name",
+          "plates.user_id",
+        ])
+        .where('plates.user_id', user_id)
+        .whereLike('plates.name', `%${name}%`)
+        .whereIn('ingredients.name', filterIngredients)
+        .innerJoin('plates', "plates.id", 'ingredients.plate_id')
+        .orderBy('plates.name')
 
     }else {
       plates = await knex('plates')
@@ -68,7 +77,17 @@ class PlatesController {
         .orderBy('name');
     }
 
-      return res.json(plates)
+    const userIngredients = await knex('ingredients').where({ user_id });
+    const platesWithIngredients = plates.map( plate => {
+      const platesIngredients = userIngredients.filter( ingredient => ingredient.plate_id === plate.id);
+
+      return {
+        ...plate,
+        ingredients: platesIngredients
+      }
+    })
+
+    return res.json(platesWithIngredients)
   }
 }
 
