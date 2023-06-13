@@ -49,6 +49,27 @@ class PlatesController {
 
     return res.json();
   }
+
+  async index( req, res ){
+    const { name, ingredients, user_id } = req.query;
+
+    let plates;
+
+    if(ingredients){
+      const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim());
+      
+      plates = await knex('ingredients')
+        .whereIn('name', filterIngredients)
+
+    }else {
+      plates = await knex('plates')
+        .where({ user_id })
+        .whereLike('name',`%${name}%`)
+        .orderBy('name');
+    }
+
+      return res.json(plates)
+  }
 }
 
 module.exports = PlatesController;
