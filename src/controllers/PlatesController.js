@@ -26,7 +26,7 @@ class PlatesController {
 
     await knex('ingredients').insert(ingredientsInsert);
 
-    res.json();
+    return res.json();
 
   }
 
