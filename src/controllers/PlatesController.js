@@ -4,9 +4,9 @@ class PlatesController {
   async create( req, res ){
     const { name, category, description, price, ingredients } = req.body;
 
-    const { user_id } = req.params;
+    const user_id = req.user.id;
 
-    const [plate_id] = await knex('plates').insert({
+    const [ plate_id ] = await knex('plates').insert({
       name,
       category,
       description,
@@ -51,7 +51,9 @@ class PlatesController {
   }
 
   async index( req, res ){
-    const { name, ingredients, user_id } = req.query;
+    const { name, ingredients } = req.query;
+
+    const user_id = req.user.id;
 
     let plates;
 

@@ -24,37 +24,37 @@ class UserController {
     return res.status(201).json()
   }
 
-  async update(req, res) {
-    const { name, email } = req.body;
+  // async update(req, res) {
+  //   const { name, email } = req.body;
 
-    const { id } = req.params;
+  //   const user_id = req.user.id;
 
-    const database = await sqliteConnection();
-    const user = await database.get('SELECT * FROM users WHERE id = (?)', [ id ]);
+  //   const database = await sqliteConnection();
+  //   const user = await database.get('SELECT * FROM users WHERE id = (?)', [ user_id ]);
 
-    if(!user) {
-      throw new AppError('Usuário não existe.');
-    }
+  //   if(!user) {
+  //     throw new AppError('Usuário não existe.');
+  //   }
 
-    const userWithUpdatedEmail = await database.get('SELECT * FROM users WHERE email = (?)', [ email ]);
-    if(userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
-      throw new AppError('Este e-mail já esta em uso.');
-    }
+  //   const userWithUpdatedEmail = await database.get('SELECT * FROM users WHERE email = (?)', [ email ]);
+  //   if(userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
+  //     throw new AppError('Este e-mail já esta em uso.');
+  //   }
 
-    user.name = name ?? user.name;
-    user.email = email ?? user.email;
+  //   user.name = name ?? user.name;
+  //   user.email = email ?? user.email;
 
-    await database.run(`
-      UPDATE users SET
-      name = ?,
-      email = ?,
-      updated_at = DATETIME('now')
-      WHERE id = ?`,
-      [user.name, user.email, id]
-    );
+  //   await database.run(`
+  //     UPDATE users SET
+  //     name = ?,
+  //     email = ?,
+  //     updated_at = DATETIME('now')
+  //     WHERE id = ?`,
+  //     [user.name, user.email, user_id]
+  //   );
 
-    return res.json()
-  }
+  //   return res.json()
+  // }
 
 
 }
