@@ -1,4 +1,6 @@
 const knex = require('../database/knex');
+const AppError = require('../utils/AppError');
+const DiskStorage = require("../providers/DiskStorage")
 
 class PlatesController {
   async create( req, res ){
@@ -90,6 +92,32 @@ class PlatesController {
     })
 
     return res.json(platesWithIngredients)
+  }
+
+  async update( req, res ){
+    const plate_id = req.params.id;
+    const plateFilename = req.file.filename;
+
+    const diskStorage = new DiskStorage();
+
+    const plate = await knex("plates")
+    .where({ id: plate_id }).first();
+
+    if(!plate){
+      throw new AppError("Prato não encontrado", 401);
+    }
+
+    if(plate.image){
+      await diskStorage.deleteFile(plate.image);
+    }
+
+    const filename = await diskStorage.saveFile(plateFilename);
+    plate.image = filename;
+
+    await knex("plates").update(plate).where({ id: plate_id});
+    
+    return res.json(plate)
+
   }
 }
 
