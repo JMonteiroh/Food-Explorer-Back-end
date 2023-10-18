@@ -53,9 +53,7 @@ class PlatesController {
   }
 
   async index( req, res ){
-    const { name, ingredients } = req.query;
-
-    const user_id = req.user.id;
+    const { name, ingredients, category } = req.query;
 
     let plates;
 
@@ -66,9 +64,7 @@ class PlatesController {
         .select([
           "plates.id",
           "plates.name",
-          "plates.user_id",
         ])
-        .where('plates.user_id', user_id)
         .whereLike('plates.name', `%${name}%`)
         .whereIn('ingredients.name', filterIngredients)
         .innerJoin('plates', "plates.id", 'ingredients.plate_id')
@@ -76,12 +72,15 @@ class PlatesController {
 
     }else {
       plates = await knex('plates')
-        .where({ user_id })
         .whereLike('name',`%${name}%`)
         .orderBy('name');
     }
+    
+    if (category) {
+      plates = plates.filter(plate => plate.category === category);
+    }
 
-    const userIngredients = await knex('ingredients').where({ user_id });
+    const userIngredients = await knex('ingredients');
     const platesWithIngredients = plates.map( plate => {
       const platesIngredients = userIngredients.filter( ingredient => ingredient.plate_id === plate.id);
 
