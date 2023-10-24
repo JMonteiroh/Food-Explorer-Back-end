@@ -89,7 +89,6 @@ class PlatesController {
         ingredients: platesIngredients
       }
     })
-
     return res.json(platesWithIngredients)
   }
 
