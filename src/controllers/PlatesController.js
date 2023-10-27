@@ -75,7 +75,7 @@ class PlatesController {
         .whereLike('name',`%${name}%`)
         .orderBy('name');
     }
-    
+
     if (category) {
       plates = plates.filter(plate => plate.category === category);
     }

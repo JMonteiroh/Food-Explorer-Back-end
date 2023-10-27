@@ -13,7 +13,7 @@ const upload = multer(uploadConfig.MULTER);
 platesRoutes.use(ensureAuthenticated)
 
 platesRoutes.get('/', platesController.index);
-platesRoutes.post('/:user_id', platesController.create);
+platesRoutes.post('/', platesController.create);
 platesRoutes.get('/:id', platesController.show);
 platesRoutes.delete('/:id', platesController.delete);
 platesRoutes.patch('/:id', upload.single("plateimage"), platesController.update);
