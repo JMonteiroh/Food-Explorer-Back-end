@@ -1,1 +1,1 @@
-Projeto de desafio final do curso explorer, na plataforma Rocketseat
+Back end do desafio final do curso explorer, na plataforma Rocketseat
